@@ -1,9 +1,11 @@
 import s from "./ContactForm.module.css";
-
 import { ErrorMessage, Field, Form, Formik } from "formik";
-
+import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
-const ContactForm = ({ handleSubmit }) => {
+
+const ContactForm = () => {
+  const contacts = useSelector((state) => state.contacts.contacts.items);
+  const dispatch = useDispatch();
   const initialValues = {
     name: "",
     phone: "",
@@ -20,6 +22,29 @@ const ContactForm = ({ handleSubmit }) => {
       .matches(phoneValidation, "Невірний формат номера телефону")
       .required("поле обов'язкове"),
   });
+  const handleSubmit = (values, actions) => {
+    const isCopy = contacts.some(
+      (contact) =>
+        contact.name.toLowerCase().trim() ===
+          values.name.toLowerCase().trim() && contact.phone === values.phone
+    );
+
+    if (isCopy) {
+      //setErrorMessage("Контакт із таким ім'ям або номером телефону вже існує.");
+      actions.setSubmitting(false);
+      return;
+    }
+    dispatch({
+      type: "addContact",
+      payload: values,
+    });
+
+    toggleFormVisibility();
+    actions.resetForm();
+  };
+  const toggleFormVisibility = () => {
+    setIsFormVisible((prev) => !prev);
+  };
   return (
     <Formik
       initialValues={initialValues}

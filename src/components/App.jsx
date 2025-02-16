@@ -3,12 +3,10 @@ import { useState, useEffect } from "react";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
 import SearchBox from "./SearchBox/SearchBox";
+import { useSelector } from "react-redux";
 
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const storedContacts = localStorage.getItem("saved-contacts");
-    return storedContacts ? JSON.parse(storedContacts) : [];
-  });
+  const contacts = useSelector((state) => state.contacts.contacts.items);
   const [searchTerm, setSearchTerm] = useState("");
   const [isFormVisible, setIsFormVisible] = useState(false);
   useEffect(() => {
@@ -28,6 +26,7 @@ const App = () => {
     ); // Видаляємо контакт
   };
   const handleSubmit = (values, actions) => {
+    console.log(actions);
     const isCopy = contacts.some(
       (contact) =>
         contact.name.toLowerCase().trim() ===

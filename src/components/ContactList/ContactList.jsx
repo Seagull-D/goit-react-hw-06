@@ -1,7 +1,13 @@
+import { useSelector } from "react-redux";
 import Contact from "../Contact/Contact";
 import s from "./ContactList.module.css";
 
-const ContactList = ({ contacts, onDelete }) => {
+const ContactList = ({ onDelete }) => {
+  const contactsList = useSelector((state) => state.contacts.contacts.items);
+  const filtr = useSelector((state) => state.contacts.filters.name);
+  const contacts = contactsList.filter((contact) =>
+    contact.name.toLowerCase().includes(filtr.toLowerCase().trim())
+  );
   if (contacts.length === 0) {
     return <p>Список контактів порожній.</p>;
   }
