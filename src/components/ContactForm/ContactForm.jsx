@@ -38,13 +38,9 @@ const ContactForm = () => {
       type: "addContact",
       payload: values,
     });
-
-    toggleFormVisibility();
     actions.resetForm();
   };
-  const toggleFormVisibility = () => {
-    setIsFormVisible((prev) => !prev);
-  };
+
   return (
     <Formik
       initialValues={initialValues}

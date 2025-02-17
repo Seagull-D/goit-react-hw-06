@@ -1,75 +1,30 @@
 import "./App.css";
-import { useState, useEffect } from "react";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
 import SearchBox from "./SearchBox/SearchBox";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
   const contacts = useSelector((state) => state.contacts.contacts.items);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  useEffect(() => {
-    localStorage.setItem("saved-contacts", JSON.stringify(contacts));
-  }, [contacts]);
+  const isFormVisible = useSelector((state) => state.contacts.isFormVisible); // Оновлений шлях
+  const dispatch = useDispatch();
 
-  const handleSearchChange = (evt) => {
-    setSearchTerm(evt.target.value.trim() || "");
-  };
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase().trim())
-  );
-
-  const handleDelete = (contactToDelete) => {
-    setContacts((prev) =>
-      prev.filter((contact) => contact !== contactToDelete)
-    ); // Видаляємо контакт
-  };
-  const handleSubmit = (values, actions) => {
-    console.log(actions);
-    const isCopy = contacts.some(
-      (contact) =>
-        contact.name.toLowerCase().trim() ===
-          values.name.toLowerCase().trim() && contact.phone === values.phone
-    );
-
-    if (isCopy) {
-      //setErrorMessage("Контакт із таким ім'ям або номером телефону вже існує.");
-      actions.setSubmitting(false);
-      return;
-    }
-    setContacts((prev) => [...prev, values]);
-    toggleFormVisibility();
-    actions.resetForm();
-  };
   const toggleFormVisibility = () => {
-    setIsFormVisible((prev) => !prev);
+    dispatch({ type: "TOGGLE_FORM_VISIBILITY" });
   };
 
   return (
     <div className="appStyle">
       <h1>Телефонна книга</h1>
-      {contacts.length > 1 && (
-        <SearchBox
-          searchTerm={searchTerm}
-          onSearchChange={handleSearchChange}
-        />
-      )}
+      {contacts.length > 1 && <SearchBox />}
       {isFormVisible ? (
-        <ContactForm
-          handleSubmit={handleSubmit}
-          closeForm={toggleFormVisibility}
-        />
+        <ContactForm closeForm={toggleFormVisibility} />
       ) : (
         <button className="toggleFormBtn" onClick={toggleFormVisibility}>
           Додати контакт
         </button>
       )}
-      <ContactList
-        contacts={filteredContacts}
-        onDelete={handleDelete}
-        closeForm={toggleFormVisibility}
-      />
+      <ContactList closeForm={toggleFormVisibility} />
     </div>
   );
 };

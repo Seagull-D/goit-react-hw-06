@@ -5,6 +5,7 @@ const initialState = {
   filters: {
     name: "",
   },
+  isFormVisible: false, // Додаємо стан для відображення форми
 };
 
 export const contactsReducer = (state = initialState, action) => {
@@ -25,6 +26,23 @@ export const contactsReducer = (state = initialState, action) => {
           ...state.contacts,
           items: [...state.contacts.items, action.payload],
         },
+      };
+
+    case "REMOVE_CONTACT":
+      return {
+        ...state,
+        contacts: {
+          ...state.contacts,
+          items: state.contacts.items.filter(
+            (contact) => contact.id !== action.payload
+          ),
+        },
+      };
+
+    case "TOGGLE_FORM_VISIBILITY":
+      return {
+        ...state,
+        isFormVisible: !state.isFormVisible, // Правильний шлях
       };
 
     default:

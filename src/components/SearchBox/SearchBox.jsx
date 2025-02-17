@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import s from "./SearchBox.module.css";
 const SearchBox = () => {
   const searchTerm = useSelector((state) => state.contacts.filters.name);
+
   const dispatch = useDispatch();
 
   const handleSearchChange = (evt) => {
