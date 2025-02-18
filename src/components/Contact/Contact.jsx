@@ -2,18 +2,11 @@ import s from "./Contact.module.css";
 import { FaUser } from "react-icons/fa";
 import { BsFillTelephoneFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
+import { deleteContac } from "../../redux/contactsSlice";
 
 const Contact = ({ contactItem }) => {
   const dispatch = useDispatch();
   const { name, phone } = contactItem;
-
-  const handleDeleteClick = () => {
-    dispatch(removeContact(contactItem.id));
-  };
-  const removeContact = (id) => ({
-    type: "REMOVE_CONTACT",
-    payload: id,
-  });
 
   return (
     <div className={s.contactContainer}>
@@ -28,7 +21,7 @@ const Contact = ({ contactItem }) => {
       <button
         className={s.contactBtn}
         type="button"
-        onClick={handleDeleteClick}
+        onClick={() => dispatch(deleteContac(contactItem.id))}
       >
         Усунути
       </button>

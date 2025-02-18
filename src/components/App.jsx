@@ -1,3 +1,4 @@
+import { toggleFormVisibility } from "../redux/visibleSlice";
 import "./App.css";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
@@ -5,26 +6,26 @@ import SearchBox from "./SearchBox/SearchBox";
 import { useDispatch, useSelector } from "react-redux";
 
 const App = () => {
-  const contacts = useSelector((state) => state.contacts.contacts.items);
-  const isFormVisible = useSelector((state) => state.contacts.isFormVisible); // Оновлений шлях
+  const contactsList = useSelector((state) => state.contacts.contacts.items);
+  const isFormVisible = useSelector((state) => state.visible.isFormVisible);
   const dispatch = useDispatch();
 
-  const toggleFormVisibility = () => {
-    dispatch({ type: "TOGGLE_FORM_VISIBILITY" });
+  const toggleForm = () => {
+    dispatch(toggleFormVisibility());
   };
 
   return (
     <div className="appStyle">
       <h1>Телефонна книга</h1>
-      {contacts.length > 1 && <SearchBox />}
+      {contactsList.length > 1 && <SearchBox />}
       {isFormVisible ? (
-        <ContactForm closeForm={toggleFormVisibility} />
+        <ContactForm closeForm={toggleForm} />
       ) : (
-        <button className="toggleFormBtn" onClick={toggleFormVisibility}>
+        <button className="toggleFormBtn" onClick={toggleForm}>
           Додати контакт
         </button>
       )}
-      <ContactList closeForm={toggleFormVisibility} />
+      <ContactList closeForm={toggleForm} />
     </div>
   );
 };

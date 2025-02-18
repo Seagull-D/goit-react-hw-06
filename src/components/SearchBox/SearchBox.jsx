@@ -1,15 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import s from "./SearchBox.module.css";
+import { changeFilter } from "../../redux/filtersSlice";
 const SearchBox = () => {
-  const searchTerm = useSelector((state) => state.contacts.filters.name);
+  const searchTerm = useSelector((state) => state.filters.name);
 
   const dispatch = useDispatch();
 
   const handleSearchChange = (evt) => {
-    dispatch({
-      type: "searchTerm",
-      payload: evt.target.value.trim() || "",
-    });
+    dispatch(changeFilter(evt.target.value.trim() || ""));
   };
   return (
     <div>

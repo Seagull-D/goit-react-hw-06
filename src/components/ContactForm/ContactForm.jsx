@@ -2,6 +2,7 @@ import s from "./ContactForm.module.css";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
+import { addContact } from "../../redux/contactsSlice";
 
 const ContactForm = () => {
   const contacts = useSelector((state) => state.contacts.contacts.items);
@@ -34,10 +35,12 @@ const ContactForm = () => {
       actions.setSubmitting(false);
       return;
     }
-    dispatch({
-      type: "addContact",
-      payload: values,
-    });
+    const newConatc = {
+      name: values.name,
+      phone: values.phone,
+      id: crypto.randomUUID(),
+    };
+    dispatch(addContact(newConatc));
     actions.resetForm();
   };
 

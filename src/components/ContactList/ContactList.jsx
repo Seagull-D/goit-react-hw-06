@@ -4,18 +4,21 @@ import s from "./ContactList.module.css";
 
 const ContactList = () => {
   const contactsList = useSelector((state) => state.contacts.contacts.items);
-  const filtr = useSelector((state) => state.contacts.filters.name);
+  const filter = useSelector((state) => state.filters.name) || ""; //
+  console.log(filter);
+
   const contacts = contactsList.filter((contact) =>
-    contact.name.toLowerCase().includes(filtr.toLowerCase().trim())
+    contact.name.toLowerCase().includes(filter.toLowerCase().trim())
   );
+
   if (contacts.length === 0) {
     return <p>Список контактів порожній.</p>;
   }
 
   return (
     <div className={s.contactsList}>
-      {contacts.map((contact, idx) => (
-        <Contact key={idx} contactItem={contact} />
+      {contacts.map((contact) => (
+        <Contact key={contact.id} contactItem={contact} />
       ))}
     </div>
   );
